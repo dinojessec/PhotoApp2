@@ -33,6 +33,9 @@ const App: () => React$Node = () => {
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}
         />
+        <View>
+          <Text>TESTing</Text>
+        </View>
       </SafeAreaView>
     </>
   );
