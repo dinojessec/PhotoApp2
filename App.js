@@ -14,6 +14,7 @@ import {
   View,
   Text,
   StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 
 import {
@@ -24,20 +25,51 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import {RNPhotoEditor} from 'react-native-photo-editor';
+import RNFS from 'react-native-fs';
+
 const App: () => React$Node = () => {
+  _onPress = () => {
+    RNPhotoEditor.Edit({
+      path: RNFS.DocumentDirectoryPath + '/photo.jpg',
+      stickers: [
+        'sticker0',
+        'sticker1',
+        'sticker2',
+        'sticker3',
+        'sticker4',
+        'sticker5',
+        'sticker6',
+        'sticker7',
+        'sticker8',
+        'sticker9',
+        'sticker10',
+      ],
+      // hiddenControls: [
+      //   'clear',
+      //   'crop',
+      //   'draw',
+      //   'save',
+      //   'share',
+      //   'sticker',
+      //   'text',
+      // ],
+      colors: undefined,
+      onDone: () => {
+        console.log('on done');
+      },
+      onCancel: () => {
+        console.log('on cancel');
+      },
+    });
+  };
+
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}
-        />
-        <View>
-          <Text>TESTing</Text>
-        </View>
-      </SafeAreaView>
-    </>
+    <View style={styles.container}>
+      <TouchableOpacity onPress={this._onPress}>
+        <Text>Click</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
