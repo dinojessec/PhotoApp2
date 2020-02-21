@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import SplashScreen from 'react-native-splash-screen';
 
 import {
@@ -17,6 +17,7 @@ import {
   Text,
   StatusBar,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 
 import {
@@ -36,7 +37,28 @@ const App: () => React$Node = () => {
     SplashScreen.hide();
   }, []);
 
-  return <PhotoEditor />;
+  // logging required things
+  const util = require('util')
+  // console.log(util.inspect(PhotoEditor, false, null, true /* enable colors */))
+
+  const [input, setInput] = useState("sample");
+
+
+  return (
+    <View style={styles.container}>
+      <Text>Sample </Text>
+      <TextInput style={{ width: '100%', height: 50, borderColor: 'black', borderWidth: 1 }} onChangeText={input => setInput(input)} value={input} />
+      <PhotoEditor myimg="sample.jpg" mycaption={input} />
+    </View>    
+  );
 };
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 20,
+  },
+});
 
 export default App;
