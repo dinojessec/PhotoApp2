@@ -1,6 +1,11 @@
 package com.dotphotoapp;
 
+import android.os.Bundle;
 import com.facebook.react.ReactActivity;
+import org.devio.rn.splashscreen.SplashScreen;
+import com.facebook.soloader.SoLoader;
+
+// import com.cboy.rn.splashscreen.SplashScreen;
 
 public class MainActivity extends ReactActivity {
 
@@ -9,6 +14,10 @@ public class MainActivity extends ReactActivity {
    * rendering of the component.
    */
   @Override
+  protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.show(this);  // here
+        super.onCreate(savedInstanceState);
+    }
   protected String getMainComponentName() {
     return "DOTphotoApp";
   }
