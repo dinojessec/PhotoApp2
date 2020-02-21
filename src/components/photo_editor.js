@@ -81,6 +81,8 @@ export default class MarkerTest extends React.Component {
     };
   }
 
+  
+
   _switch = () => {
     this.setState({
       markImage: !this.state.markImage,
@@ -110,6 +112,9 @@ export default class MarkerTest extends React.Component {
   };
 
   render() {
+
+    console.log(this.state);
+
     return (
       <View style={{flex: 1}}>
         <ScrollView style={s.container}>
@@ -387,7 +392,7 @@ export default class MarkerTest extends React.Component {
     } else {
       Marker.markText({
         src: this.state.image,
-        text: 'text marker \n muiltline text',
+        text: this.props.mycaption,
         X: 30,
         Y: 30,
         color: '#FF0',
