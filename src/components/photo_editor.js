@@ -19,6 +19,8 @@ const base64Bg = require('./bas64bg.js').default;
 
 const {width, height} = Dimensions.get('window');
 
+// testing lang
+
 const s = StyleSheet.create({
   container: {
     flex: 1,
