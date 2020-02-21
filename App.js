@@ -27,29 +27,16 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import {RNPhotoEditor} from 'react-native-photo-editor';
-import RNFS from 'react-native-fs';
-
-import {RNCamera} from 'react-native-camera';
+// components
+// import Test from './src/components/test';
+import PhotoEditor from './src/components/photo_editor';
 
 const App: () => React$Node = () => {
   useEffect(() => {
     SplashScreen.hide();
   }, []);
 
-  return (
-    <View style={styles.container}>
-      <Text>Photo App</Text>
-    </View>
-  );
+  return <PhotoEditor />;
 };
-
-const styles = StyleSheet.create({
-  container: {
-    borderRadius: 4,
-    borderWidth: 0.5,
-    borderColor: '#d6d7da',
-  },
-});
 
 export default App;
