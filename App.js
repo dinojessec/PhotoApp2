@@ -51,16 +51,28 @@ const App: () => React$Node = () => {
     });
   }
 
+  // const util = require('util')
+  // console.log(util.inspect(PhotoEditor, false, null, true /* enable colors */))
+
+  const [input, setInput] = useState('sample');
 
   return (
     <View style={styles.container}>
       <Text>Sample </Text>
-      <TextInput style={{ width: '100%', height: 50, borderColor: 'black', borderWidth: 1 }} onChangeText={input => setInput(input)} value={input} />
-      <PhotoEditor myimg="sample.jpg" mycaption={input} imagehandler={saveImageHandler} />
-    </View>    
+      <TextInput
+        style={{
+          width: '100%',
+          height: 50,
+          borderColor: 'black',
+          borderWidth: 1,
+        }}
+        onChangeText={input => setInput(input)}
+        value={input}
+      />
+      <PhotoEditor myimg="sample.jpg" mycaption={input} />
+    </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
