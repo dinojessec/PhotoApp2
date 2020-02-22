@@ -31,6 +31,7 @@ import {
 // components
 // import Test from './src/components/test';
 import PhotoEditor from './src/components/photo_editor';
+import RNFS from "react-native-fs";
 
 const App: () => React$Node = () => {
   useEffect(() => {
@@ -39,16 +40,23 @@ const App: () => React$Node = () => {
 
   // logging required things
   const util = require('util')
-  // console.log(util.inspect(PhotoEditor, false, null, true /* enable colors */))
+  console.log(util.inspect(RNFS, false, null, true /* enable colors */))
 
   const [input, setInput] = useState("sample");
+
+  const saveImageHandler = (fromURL, toFile) => {
+    console.log(fromURL, toFile)
+    RNFS.copyFileAssets({filepath: fromURL, destPath: toFile}).promise.then(res => {
+      console.log("I've downloaded it.")
+    });
+  }
 
 
   return (
     <View style={styles.container}>
       <Text>Sample </Text>
       <TextInput style={{ width: '100%', height: 50, borderColor: 'black', borderWidth: 1 }} onChangeText={input => setInput(input)} value={input} />
-      <PhotoEditor myimg="sample.jpg" mycaption={input} />
+      <PhotoEditor myimg="sample.jpg" mycaption={input} imagehandler={saveImageHandler} />
     </View>    
   );
 };

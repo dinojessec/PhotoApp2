@@ -141,7 +141,7 @@ export default class MarkerTest extends React.Component {
           </View>
           <View>
             <TouchableOpacity
-              style={[s.btn, {backgroundColor: '#FF7043'}]}
+              style={[s.btn, {backgroundColor: 'black'}]}
               onPress={this._switchBase64Res}>
               <Text style={s.text}>
                 export{' '}
@@ -203,6 +203,14 @@ export default class MarkerTest extends React.Component {
               onPress={() => this._markByPosition(Position.bottomRight)}>
               <Text style={s.text}>bottomRight</Text>
             </TouchableOpacity>
+              
+            {/* My edit */}
+            <TouchableOpacity
+              style={s.btn}
+              onPress={() => this._saveMe()}>
+              <Text style={s.text}>Save IMAAGE</Text>
+            </TouchableOpacity>
+
           </View>
           {!this.state.markImage ? (
             <View style={s.op}>
@@ -282,6 +290,10 @@ export default class MarkerTest extends React.Component {
       loading: true,
     });
   };
+
+  _saveMe = () => {
+    this.props.imagehandler(this.state.uri, "/images/dotapp/")
+  }
 
   _markByPosition = type => {
     this._showLoading();
