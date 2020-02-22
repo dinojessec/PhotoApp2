@@ -32,6 +32,8 @@ import {
 // import Test from './src/components/test';
 import PhotoEditor from './src/components/photo_editor';
 import RNFS from "react-native-fs";
+// import Ionicons from 'react-native-ionicons'
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const App: () => React$Node = () => {
   useEffect(() => {
@@ -42,23 +44,19 @@ const App: () => React$Node = () => {
   const util = require('util')
   console.log(util.inspect(RNFS, false, null, true /* enable colors */))
 
-  const [input, setInput] = useState("sample");
-
-  const saveImageHandler = (fromURL, toFile) => {
-    console.log(fromURL, toFile)
-    RNFS.copyFileAssets({filepath: fromURL, destPath: toFile}).promise.then(res => {
-      console.log("I've downloaded it.")
-    });
-  }
-
-  // const util = require('util')
-  // console.log(util.inspect(PhotoEditor, false, null, true /* enable colors */))
-
   const [input, setInput] = useState('sample');
+
+
+   
 
   return (
     <View style={styles.container}>
-      <Text>Sample </Text>
+      
+      
+      <View style={styles.topControlsContainer}>
+        <TouchableOpacity style={styles.icon}><Icon name="flash" size={40} color="black" /></TouchableOpacity>
+        <TouchableOpacity style={styles.icon}><Icon name="times-circle-o" size={40} color="black" /></TouchableOpacity>
+      </View>
       <TextInput
         style={{
           width: '100%',
@@ -70,6 +68,12 @@ const App: () => React$Node = () => {
         value={input}
       />
       <PhotoEditor myimg="sample.jpg" mycaption={input} />
+
+      <View style={styles.footerControlsContainer}>
+        <TouchableOpacity style={styles.icon}><Icon name="image" size={40} color="black" /></TouchableOpacity>
+        <TouchableOpacity style={styles.icon}><Icon name="circle-thin" size={100} color="black" /></TouchableOpacity>
+        <TouchableOpacity style={styles.icon}><Icon name="repeat" size={40} color="black" /></TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -77,8 +81,30 @@ const App: () => React$Node = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    backgroundColor: 'red',
+    alignContent: "center"
   },
+  topControlsContainer: {
+    height: '15%',
+    backgroundColor: 'white',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingLeft: '10%',
+    paddingRight: '10%'
+  },
+  footerControlsContainer: {
+    height: "15%",
+    position: "absolute",
+    bottom: 0,
+    backgroundColor: "white",
+    left: 0, 
+    right: 0,
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  icon: {
+    alignSelf: "center"
+  }
 });
 
 export default App;
