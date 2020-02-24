@@ -19,12 +19,8 @@ const icon = require('./icon.jpeg');
 const bg = require('./bg.png');
 const base64Bg = require('./bas64bg.js').default;
 
-const {width, height} = Dimensions.get('window');
-
-const textBgStretch = ['', 'stretchX', 'stretchY'];
-
 function PhotoEditor(props) {
-  let {setWatermarkedImage} = props;
+  let {setImage} = props;
   let [details, setDetails] = useState({
     uri: '',
     image: bg,
@@ -91,7 +87,7 @@ function PhotoEditor(props) {
             saveFormat: details.saveFormat,
           })
             .then(path => {
-              setWatermarkedImage({
+              setImage({
                 uri:
                   details.saveFormat === ImageFormat.base64
                     ? path
