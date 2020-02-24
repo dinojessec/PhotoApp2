@@ -24,7 +24,7 @@ const {width, height} = Dimensions.get('window');
 const textBgStretch = ['', 'stretchX', 'stretchY'];
 
 function PhotoEditor(props) {
-  let {setFinalImage} = props;
+  let {setWatermarkedImage} = props;
   let [details, setDetails] = useState({
     uri: '',
     image: bg,
@@ -80,11 +80,7 @@ function PhotoEditor(props) {
         // You can display the image using either:
         // const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
         const uri = response.uri;
-        // console.log('uri == ', uri);
         if (type === 'image') {
-          // setDetails({...details, uri: uri});
-          // console.log('show image', details);
-          console.log(details.marker);
           Marker.markImage({
             src: uri,
             markerSrc: details.marker,
@@ -95,7 +91,7 @@ function PhotoEditor(props) {
             saveFormat: details.saveFormat,
           })
             .then(path => {
-              setFinalImage({
+              setWatermarkedImage({
                 uri:
                   details.saveFormat === ImageFormat.base64
                     ? path
@@ -116,42 +112,13 @@ function PhotoEditor(props) {
     });
   };
 
-  // _addWatermark = () => {
-  //   Marker.markImage({
-  //     src: details.uri,
-  //     markerSrc: icon,
-  //     position: Position.topLeft,
-  //     scale: 1,
-  //     markerScale: 1,
-  //     quality: 100,
-  //     saveFormat: details.saveFormat,
-  //   })
-  //     .then(path => {
-  //       setFinalImage({
-  //         uri:
-  //           details.saveFormat === ImageFormat.base64
-  //             ? path
-  //             : Platform.OS === 'android'
-  //             ? 'file://' + path
-  //             : path,
-  //       });
-  //       console.log(finalImage.uri);
-  //     })
-  //     .catch(err => {
-  //       console.log('====================================');
-  //       console.log(err, 'err');
-  //       console.log('====================================');
-  //     });
-  // };
   return (
     <View style={styles.buttonContainer}>
       <TouchableOpacity
-        onPress={() => {
-          _pickImage('image')
-          props.setScreen('editImage-screen')  
-        }}
-        style={styles.pickImageButton}>
-        <Text> Select a Photo</Text>
+        onPress={() => _pickImage('image')}
+        style={styles.pickImage}>
+        <Image style={{height: 27, width: 27, margin: 5}} />
+        <Text> Get Image </Text>
       </TouchableOpacity>
     </View>
   );
