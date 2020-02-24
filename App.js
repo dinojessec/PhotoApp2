@@ -50,7 +50,7 @@ const App: () => React$Node = () => {
 
 
   
-  if(screen === 'home-screen'){
+  if(screen === 'secret-screen'){
     return (
       <View style={styles.container}>
 
@@ -83,10 +83,10 @@ const App: () => React$Node = () => {
     );
   }
   
-  if(screen === 'edit-screen'){
+  if(screen === 'home-screen'){
     return (
       <View style={styles.container}>
-        <PhotoEditor myimg="sample.jpg" mycaption={input} />
+        <PhotoEditor myimg="sample.jpg" mycaption={input} setScreen={setScreen}/>
         
       </View>
     );

@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import Marker, {Position, ImageFormat} from 'react-native-image-marker';
 import Picker from 'react-native-image-picker';
+
+import Icon from 'react-native-vector-icons/FontAwesome';
 const icon = require('./icon.jpeg');
 // const iconTP = require('./tpimage.png')
 const bg = require('./bg.png');
@@ -22,6 +24,9 @@ const {width, height} = Dimensions.get('window');
 const textBgStretch = ['', 'stretchX', 'stretchY'];
 
 function PhotoEditor(props) {
+
+  let [screen, setScreen] = useState('select-screen');
+
   let [details, setDetails] = useState({
     uri: '',
     image: bg,
@@ -35,9 +40,7 @@ function PhotoEditor(props) {
     loading: false,
   });
 
-  _switch = () => {
-    setDetails({markImage: !details.markImage});
-  };
+  let [finalImage, setFinalImage] = useState({uri: ''});
 
   _switchBase64Res = () => {
     setDetails({
@@ -49,10 +52,11 @@ function PhotoEditor(props) {
   };
 
   _pickImage = type => {
+    console.log(type)
     let options = {
-      title: 'title',
-      takePhotoButtonTitle: 'camera',
-      chooseFromLibraryButtonTitle: 'gallery',
+      title: 'Select a Photo',
+      takePhotoButtonTitle: 'Take Photo...',
+      chooseFromLibraryButtonTitle: 'Choose from Gallery...',
       cancelButtonTitle: 'cancel',
       quality: 0.5,
       mediaType: 'photo',
@@ -66,7 +70,7 @@ function PhotoEditor(props) {
       },
       allowsEditing: true,
     };
-    Picker.showImagePicker(options, response => {
+    Picker.showImagePicker( response => {
       if (response.didCancel) {
         console.log('User cancelled photo picker');
       } else if (response.error) {
@@ -81,14 +85,31 @@ function PhotoEditor(props) {
         if (type === 'image') {
           setDetails({...details, uri: uri});
           console.log('show image', details);
+          // setScreen('edit-screen');
+          Marker.markImage({
+            src: details.uri,
+            markerSrc: details.marker,
+            position: Position.topLeft,
+            scale: 1,
+            markerScale: 1,
+            quality: 100,
+            saveFormat: details.saveFormat
+          }).then(path => {
+            console.log(finalImage)
+            setFinalImage({...finalImage, 
+              uri:
+                details.saveFormat === ImageFormat.base64
+                  ? path
+                  : Platform.OS === 'android'
+                  ? 'file://' + path
+                  : path,
+            });
+          })
           // this.setState({
           //   image: uri,
           // });
-          console.log(details);
+          // console.log(details);
           // setDetails({uri: })
-          return (
-            <Text>YOU CAME HERE</Text>    
-          )
         } else {
           console.log('show marker');
           // this.setState({
@@ -98,29 +119,65 @@ function PhotoEditor(props) {
       }
     });
   };
-  // console.log(options);
-  return (
-    <View>
-      <Text>Test</Text>
-      <TouchableOpacity onPress={() => _pickImage('image')}>
-        <Text>pick image</Text>
-      </TouchableOpacity>
-      <Image
-        source={{uri: details.uri}}
-        resizeMode="contain"
-        style={{ height: 100, width: 100}}
-      />
-      <View style={{flex: 1}}>
-        {details.uri ? (
-          // <Image source={{uri: details.uri}} resizeMode="contain" />
-          <Text>image</Text>
-        ) : null}
+  
+  if(screen === "select-screen"){
+    return (
+      <View style={styles.container}>
+        <TouchableOpacity onPress={() => _pickImage('image')} style={styles.icon}><Text>Select a Photo</Text><Icon name="circle-thin" size={100} color="black" /></TouchableOpacity>
+        <Image
+          source={finalImage.uri}
+        />
+        {details.uri ? 
+        <Text>URI{details.uri}</Text>
+        
+
+        :null }
       </View>
-      
-      <Text>URI{details.uri}</Text>
-    </View>
-  );
+    );
+  }
+
+  if(screen === "edit-screen") {
+    return (
+      <View style={styles.container}>
+        
+      </View>
+    )
+  }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  topControlsContainer: {
+    height: '15%',
+    backgroundColor: 'white',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingLeft: '10%',
+    paddingRight: '10%'
+  },
+  footerControlsContainer: {
+    height: "15%",
+    position: "absolute",
+    bottom: 0,
+    backgroundColor: "white",
+    left: 0,
+    right: 0,
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  icon: {
+    alignSelf: "center"
+  },
+  cameraContainer: {
+    flex: 1,
+    backgroundColor: 'green'
+  }
+});
 
 export default PhotoEditor;
 
