@@ -10,17 +10,14 @@ import {
   StyleSheet,
 } from 'react-native';
 import Marker, {Position, ImageFormat} from 'react-native-image-marker';
-import Picker from 'react-native-image-picker';
-import RNFS from 'react-native-fs';
 
 const icon = require('./icon.jpeg');
-// const iconTP = require('./tpimage.png')
 const bg = require('./bg.png');
 const base64Bg = require('./bas64bg.js').default;
 
 function AddTextToImage(props) {
-  let {watermarkedImage, setFinalImage} = props;
-  console.log('======', watermarkedImage);
+  // let {watermarkedImage, setFinalImage} = props;
+  let {image, setImage} = props;
   let [details, setDetails] = useState({
     uri: '',
     image: bg,
@@ -37,31 +34,33 @@ function AddTextToImage(props) {
   let [value, onChangeText] = useState('Useless Placeholder');
 
   _addTextToImage = input => {
-    Marker.markText({
-      src: watermarkedImage,
-      text: value,
-      position: Position.bottomCenter,
-      color: '#FFFFFF',
-      // fontName: 'Arial-BoldItalicMT',
-      fontName: 'Barabara',
-      fontSize: 44,
-      scale: 1,
-      quality: 100,
-      saveFormat: details.saveFormat,
-    }).then(path => {
-      setFinalImage({
-        uri:
-          details.saveFormat === ImageFormat.base64
-            ? path
-            : Platform.OS === 'android'
-            ? 'file://' + path
-            : path,
-      }).catch(err => {
-        console.log('====================================');
-        console.log(err);
-        console.log('====================================');
+    if (image) {
+      Marker.markText({
+        src: image,
+        text: value,
+        position: Position.bottomCenter,
+        color: '#FFFFFF',
+        // fontName: 'Arial-BoldItalicMT',
+        fontName: 'Barabara',
+        fontSize: 44,
+        scale: 1,
+        quality: 100,
+        saveFormat: details.saveFormat,
+      }).then(path => {
+        setImage({
+          uri:
+            details.saveFormat === ImageFormat.base64
+              ? path
+              : Platform.OS === 'android'
+              ? 'file://' + path
+              : path,
+        }).catch(err => {
+          console.log('====================================');
+          console.log(err);
+          console.log('====================================');
+        });
       });
-    });
+    }
   };
   return (
     <>

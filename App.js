@@ -21,16 +21,6 @@ import {
   Platform,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-import Camera from './src/components/camera';
-import RNFS from 'react-native-fs';
 import PhotoEditor from './src/components/photo_editor';
 import AddTextToImage from './src/components/AddTextToImage';
 
@@ -39,19 +29,25 @@ const App: () => React$Node = () => {
     SplashScreen.hide();
   }, []);
 
-  let [watermarkedImage, setWatermarkedImage] = useState({uri: ''});
-  let [finalImage, setFinalImage] = useState({uri: ''});
-  console.log('==========watermarked', watermarkedImage);
-  console.log('==========final', finalImage);
+  // let [watermarkedImage, setWatermarkedImage] = useState({uri: ''});
+  // let [finalImage, setFinalImage] = useState({uri: ''});
+
+  let [image, setImage] = useState({uri: ''});
+
   return (
     <View>
-      <PhotoEditor setWatermarkedImage={setWatermarkedImage} />
-      <AddTextToImage
-        watermarkedImage={watermarkedImage}
-        setFinalImage={setFinalImage}
-      />
+      <PhotoEditor setImage={setImage} />
+      <AddTextToImage image={image} setImage={setImage} />
+
       <View style={{flex: 1, flexDirection: 'row'}}>
-        {finalImage.uri ? (
+        {image.uri ? (
+          <Image
+            source={{uri: image.uri}}
+            resizeMode="contain"
+            style={styles.image}
+          />
+        ) : null}
+        {/* {finalImage.uri ? (
           <Image
             source={{uri: finalImage.uri}}
             resizeMode="contain"
@@ -63,8 +59,7 @@ const App: () => React$Node = () => {
             resizeMode="contain"
             style={{aspectRatio: 1, width: '100%'}}
           />
-        ) : null}
-        <Text>====================================</Text>
+        ) : null} */}
       </View>
     </View>
     );
@@ -82,5 +77,12 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 })
+
+const styles = StyleSheet.create({
+  image: {
+    aspectRatio: 1,
+    width: '100%',
+  },
+});
 
 export default App;
