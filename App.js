@@ -23,66 +23,95 @@ import {
 
 import PhotoEditor from './src/components/photo_editor';
 import AddTextToImage from './src/components/AddTextToImage';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const App: () => React$Node = () => {
   useEffect(() => {
     SplashScreen.hide();
   }, []);
 
-  // let [watermarkedImage, setWatermarkedImage] = useState({uri: ''});
-  // let [finalImage, setFinalImage] = useState({uri: ''});
-
   let [image, setImage] = useState({uri: ''});
+  let [screen, setScreen] = useState('pickImage-screen');
+  let addTextIcon = require('./src/components/text.png');
+  let exitIcon = require('./src/components/exit.png');
 
-  return (
-    <View>
-      <PhotoEditor setImage={setImage} />
-      <AddTextToImage image={image} setImage={setImage} />
+  let changeScreen = screenName => {
+    setScreen(screenName);
+  }
 
-      <View style={{flex: 1, flexDirection: 'row'}}>
-        {image.uri ? (
-          <Image
-            source={{uri: image.uri}}
-            resizeMode="contain"
-            style={styles.image}
-          />
-        ) : null}
-        {/* {finalImage.uri ? (
-          <Image
-            source={{uri: finalImage.uri}}
-            resizeMode="contain"
-            style={{aspectRatio: 1, width: '100%'}}
-          />
-        ) : watermarkedImage.uri ? (
-          <Image
-            source={{uri: watermarkedImage.uri}}
-            resizeMode="contain"
-            style={{aspectRatio: 1, width: '100%'}}
-          />
-        ) : null} */}
+  if(screen === "pickImage-screen"){
+    console.log(screen)
+    return (
+      <View style={styles.container}>
+        <Text style={styles.buttonTextStyling}>Select a Photo</Text>
+        <View style={styles.iconsContainer}>
+          <PhotoEditor setImage={setImage} photoFrom="camera" buttonTitle="Camera" setScreen={setScreen} screen={screen} />
+          <PhotoEditor setImage={setImage} photoFrom="gallery" buttonTitle="Gallery" setScreen={setScreen} screen={screen} />
+        </View>  
       </View>
-    </View>
+    )
+  }
+
+  if(screen === "editImage-screen"){
+    console.log(screen)
+    return (
+      <View style={{flex: 1}}>
+        <View style={{flex: 1}}>
+          <View style={styles.topControls}>
+            <TouchableOpacity>
+              <Image source={addTextIcon} style={{height: 40, width: 40}} />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Image source={exitIcon} style={{height: 40, width: 40}} onPress={() => changeScreen('pickImage-screen')} />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={{flex: 3, justifyContent: "center"}}>
+          {image.uri ? (
+            <Image
+              source={{uri: image.uri}}
+              resizeMode="contain"
+              style={styles.image}
+            />
+          ) : null}
+        </View>
+
+        <View style={{flex: 1}}>
+          <Text>HELLO</Text>
+        </View>
+      </View>
     );
-  };
+  }
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
-  imageContainer: {
+  image: {
     width: '100%',
     aspectRatio: 1,
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+    alignItems: 'center'
+  },
+  buttonTextStyling: {
+    fontFamily: "Barabara"
+  },
+  topControls: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: '20%',
+    top: 100
+  },
+  iconsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
 })
 
-const styles = StyleSheet.create({
-  image: {
-    aspectRatio: 1,
-    width: '100%',
-  },
-});
 
 export default App;

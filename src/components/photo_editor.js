@@ -13,6 +13,8 @@ import {
 import Marker, {Position, ImageFormat} from 'react-native-image-marker';
 import Picker from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 const icon = require('./icon.jpeg');
 // const iconTP = require('./tpimage.png')
@@ -20,7 +22,7 @@ const bg = require('./bg.png');
 const base64Bg = require('./bas64bg.js').default;
 
 function PhotoEditor(props) {
-  let {setImage} = props;
+  let {setImage, setScreen} = props;
   let [details, setDetails] = useState({
     uri: '',
     image: bg,
@@ -47,7 +49,7 @@ function PhotoEditor(props) {
     });
   };
 
-  _pickImage = type => {
+  _pickImageCamera = type => {
     let options = {
       title: 'title',
       takePhotoButtonTitle: 'camera',
@@ -65,7 +67,7 @@ function PhotoEditor(props) {
       },
       allowsEditing: true,
     };
-    Picker.showImagePicker(options, response => {
+    Picker.launchCamera(options, response => {
       if (response.didCancel) {
         console.log('User cancelled photo picker');
       } else if (response.error) {
@@ -95,6 +97,7 @@ function PhotoEditor(props) {
                     ? 'file://' + path
                     : path,
               });
+              setScreen('editImage-screen')
             })
             .catch(err => {
               console.log('====================================');
@@ -108,22 +111,107 @@ function PhotoEditor(props) {
     });
   };
 
-  return (
-    <View style={styles.buttonContainer}>
-      <TouchableOpacity
-        onPress={() => _pickImage('image')}
-        style={styles.pickImage}>
-        <Image style={{height: 27, width: 27, margin: 5}} />
-        <Text> Get Image </Text>
-      </TouchableOpacity>
-    </View>
-  );
+  _pickImageGallery = type => {
+    let options = {
+      title: 'title',
+      takePhotoButtonTitle: 'camera',
+      // chooseFromLibraryButtonTitle: 'gallery',
+      cancelButtonTitle: 'cancel',
+      quality: 0.5,
+      mediaType: 'photo',
+      maxWidth: 2000,
+      noData: true,
+      maxHeight: 2000,
+      dateFormat: 'yyyy-MM-dd HH:mm:ss',
+      storageOptions: {
+        skipBackup: true,
+        path: 'imagePickerCache',
+      },
+      allowsEditing: true,
+    };
+    Picker.launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled photo picker');
+      } else if (response.error) {
+        console.log('ImagePickerManager Error: ', response.error);
+      } else if (response.customButton) {
+        // this.showCamera();
+      } else {
+        // You can display the image using either:
+        // const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
+        const uri = response.uri;
+        if (type === 'image') {
+          Marker.markImage({
+            src: uri,
+            markerSrc: details.marker,
+            position: Position.topLeft,
+            scale: 1,
+            markerScale: 1,
+            quality: 100,
+            saveFormat: details.saveFormat,
+          })
+            .then(path => {
+              setImage({
+                uri:
+                  details.saveFormat === ImageFormat.base64
+                    ? path
+                    : Platform.OS === 'android'
+                    ? 'file://' + path
+                    : path,
+              });
+              setScreen('editImage-screen')
+            })
+            .catch(err => {
+              console.log('====================================');
+              console.log(err, 'err');
+              console.log('====================================');
+            });
+        } else {
+          console.log('show marker');
+        }
+      }
+    });
+  };
+  
+ 
+ 
+  if(props.photoFrom === "camera"){
+    return (
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          onPress={() => _pickImageCamera('image')}
+          style={styles.buttonGroup}  
+          >
+          <Icon name="camera" size={40} color="black" />
+          <Text> {props.buttonTitle} </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+  if(props.photoFrom === "gallery"){
+    return (
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          onPress={() => _pickImageGallery('image')}
+          style={styles.buttonGroup}  
+        >
+          <Icon name="image" size={40} color="black" />
+          <Text> {props.buttonTitle} </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+  
 }
 
 const styles = StyleSheet.create({
   buttonContainer: {
     justifyContent: "center",
-    width: '100%'
+    justifyContent: "space-between",
+    padding: 20
+  },
+  buttonGroup: {
+    alignItems: "center"
   },
   pickImageButton: {
     alignItems: 'center',
