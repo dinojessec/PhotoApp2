@@ -22,8 +22,8 @@ import {
 } from 'react-native';
 
 import PhotoEditor from './src/components/photo_editor';
-import AddTextToImage from './src/components/AddTextToImage';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Marker, {Position, ImageFormat} from 'react-native-image-marker';
 
 const App: () => React$Node = () => {
   useEffect(() => {
@@ -32,12 +32,40 @@ const App: () => React$Node = () => {
 
   let [image, setImage] = useState({uri: ''});
   let [screen, setScreen] = useState('pickImage-screen');
+  let [value, onChangeText] = useState('Useless Placeholder');
+
   let addTextIcon = require('./src/components/text.png');
   let exitIcon = require('./src/components/exit.png');
 
   let changeScreen = screenName => {
     setScreen(screenName);
   }
+
+
+  let _addTextToImage = (input, fontSize) => {
+    if (image) {
+      Marker.markText({
+        src: image,
+        text: input,
+        position: Position.bottomCenter,
+        color: '#FFFFFF',
+        // fontName: 'Arial-BoldItalicMT',
+        fontName: 'Barabara',
+        fontSize: fontSize,
+        scale: 1,
+        quality: 100,
+        saveFormat: ImageFormat.png,
+      }).then(path => {
+        setImage({
+          uri: Platform.OS === 'android' ? 'file://' + path : path
+        }).catch(err => {
+          console.log('====================================');
+          console.log(err);
+          console.log('====================================');
+        });
+      });
+    }
+  };
 
   if(screen === "pickImage-screen"){
     console.log(screen)
@@ -58,11 +86,11 @@ const App: () => React$Node = () => {
       <View style={{flex: 1}}>
         <View style={{flex: 1}}>
           <View style={styles.topControls}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => _addTextToImage("hello", 400)} >
               <Image source={addTextIcon} style={{height: 40, width: 40}} />
             </TouchableOpacity>
-            <TouchableOpacity>
-              <Image source={exitIcon} style={{height: 40, width: 40}} onPress={() => changeScreen('pickImage-screen')} />
+            <TouchableOpacity onPress={() => changeScreen('pickImage-screen')}>
+              <Image source={exitIcon} style={{height: 40, width: 40}} />
             </TouchableOpacity>
           </View>
         </View>
@@ -83,6 +111,9 @@ const App: () => React$Node = () => {
       </View>
     );
   }
+
+  
+
 };
 
 const styles = StyleSheet.create({
