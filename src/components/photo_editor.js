@@ -24,7 +24,7 @@ const {width, height} = Dimensions.get('window');
 const textBgStretch = ['', 'stretchX', 'stretchY'];
 
 function PhotoEditor(props) {
-  let {finalImage, setFinalImage} = props;
+  let {setFinalImage} = props;
   let [details, setDetails] = useState({
     uri: '',
     image: bg,
@@ -37,10 +37,6 @@ function PhotoEditor(props) {
     saveFormat: ImageFormat.png,
     loading: false,
   });
-
-  useEffect(() => {
-    _pickImage('image');
-  }, [finalImage]);
 
   _switch = () => {
     setDetails({markImage: !details.markImage});
@@ -149,12 +145,12 @@ function PhotoEditor(props) {
   // };
   return (
     <View>
-      {/* <TouchableOpacity
-        onPress={() => _launchCamera('image')}
+      <TouchableOpacity
+        onPress={() => _pickImage('image')}
         style={styles.pickImage}>
         <Image style={{height: 27, width: 27, margin: 5}} />
         <Text> pick image </Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity>
     </View>
   );
 }

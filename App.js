@@ -64,9 +64,9 @@ const App: () => React$Node = () => {
   return (
     <View>
       {/* <Camera setCapturedImage={setCapturedImage} /> */}
-      {finalImage ? null : (
-        <PhotoEditor finalImage={finalImage} setFinalImage={setFinalImage} />
-      )}
+
+      <PhotoEditor finalImage={finalImage} setFinalImage={setFinalImage} />
+
       <View style={{flex: 1, flexDirection: 'row'}}>
         {finalImage.uri ? (
           <Image
