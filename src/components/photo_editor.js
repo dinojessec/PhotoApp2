@@ -59,10 +59,10 @@ function PhotoEditor(props) {
       noData: true,
       maxHeight: 2000,
       dateFormat: 'yyyy-MM-dd HH:mm:ss',
-      storageOptions: {
-        skipBackup: true,
-        path: 'imagePickerCache',
-      },
+      // storageOptions: {
+      //   skipBackup: true,
+      //   path: 'PhotoApp',
+      // },
       allowsEditing: true,
     };
     Picker.showImagePicker(options, response => {
@@ -100,6 +100,7 @@ function PhotoEditor(props) {
               console.log('====================================');
               console.log(err, 'err');
               console.log('====================================');
+              throw err;
             });
         } else {
           console.log('show marker');
