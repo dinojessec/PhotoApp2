@@ -6,7 +6,8 @@
  * @flow
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import SplashScreen from 'react-native-splash-screen';
 
 import {
   SafeAreaView,
@@ -14,8 +15,10 @@ import {
   ScrollView,
   View,
   Text,
-  StatusBar,
+  Image,
   TouchableOpacity,
+  TextInput,
+  Platform,
 } from 'react-native';
 
 import {
@@ -26,149 +29,56 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import {RNPhotoEditor} from 'react-native-photo-editor';
+import Camera from './src/components/camera';
 import RNFS from 'react-native-fs';
-import { RNCamera } from 'react-native-camera';
-
-
-const PendingView = () => (
-  <View
-    style={{
-      flex: 1,
-      backgroundColor: 'lightgreen',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}
-  >
-    <Text>Waiting</Text>
-  </View>
-);
+import PhotoEditor from './src/components/photo_editor';
 
 const App: () => React$Node = () => {
-  const util = require('util')
-  _onPress = () => {
-    RNPhotoEditor.Edit({
-      path: RNFS.DocumentDirectoryPath + '/photo.jpg',
-      stickers: [
-        'sticker0',
-        'sticker1',
-        'sticker2',
-        'sticker3',
-        'sticker4',
-        'sticker5',
-        'sticker6',
-        'sticker7',
-        'sticker8',
-        'sticker9',
-        'sticker10',
-      ],
-      // hiddenControls: [
-      //   'clear',
-      //   'crop',
-      //   'draw',
-      //   'save',
-      //   'share',
-      //   'sticker',
-      //   'text',
-      // ],
-      colors: undefined,
-      onDone: () => {
-        console.log('on done');
-        console.log(util.inspect(RNCamera, false, null, true /* enable colors */))
-      },
-      onCancel: () => {
-        console.log('on cancel');
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
 
-      },
-    });
-  };
+  let [finalImage, setFinalImage] = useState({uri: ''});
 
-  takePicture = async function(camera) {
-    const options = { quality: 0.5, base64: true };
-    const data = await camera.takePictureAsync(options);
-    //  eslint-disable-next-line
-    console.log(data.uri);
-  };
+  // let [capturedImage, setCapturedImage] = useState({
+  //   uri: '',
+  // });
 
+  // RNFS.readDir(RNFS.MainBundlePath)
+  //   .then(result => {
+  //     console.log('GOT RESULT', result);
+  //     return Promise.all([RNFS.stat(result[0].path), result[0].path]);
+  //   })
+  //   .then(statResult => {
+  //     if (statResult[0].isFile()) {
+  //       return RNFS.readFile(statResult[1], 'utf8');
+  //     }
+  //     return 'no file';
+  //   })
+  //   .then(contents => {
+  //     console.log(contents);
+  //   })
+  //   .catch(err => {
+  //     console.log(err.message, err.code);
+  //   });
   return (
-    <View style={styles.container}>
-      <RNCamera 
-        style={styles.preview}
-        type={RNCamera.Constants.Type.back}
-        flashMode={RNCamera.Constants.FlashMode.off}
-        androidCameraPermissionOptions={{
-          title: 'Permission to use camera',
-          message: 'We need your permission to use your camera',
-          buttonPositive: 'Ok',
-          buttonNegative: 'Cancel',
-        }}
-        
-      >
-        {({ camera, status }) => {
-          if (status !== 'READY') return <PendingView />;
-          return (
-            <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-              <TouchableOpacity onPress={() => this.takePicture(camera)} style={styles.capture}>
-                <Text style={{ fontSize: 14 }}> SNAP </Text>
-              </TouchableOpacity>
-            </View>
-          );
-        }}
-      </RNCamera>
-      <TouchableOpacity onPress={_onPress}>
-        <Text>Click</Text>
-      </TouchableOpacity>
+    <View>
+      {/* <Camera setCapturedImage={setCapturedImage} /> */}
+
+      <PhotoEditor finalImage={finalImage} setFinalImage={setFinalImage} />
+
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        {finalImage.uri ? (
+          <Image
+            source={{uri: finalImage.uri}}
+            resizeMode="contain"
+            style={{height: 100, width: 100}}
+          />
+        ) : null}
+        <Text>====================================</Text>
+      </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: 'black',
-  },
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
 
 export default App;
