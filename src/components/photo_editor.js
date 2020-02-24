@@ -84,6 +84,11 @@ function PhotoEditor(props) {
           // this.setState({
           //   image: uri,
           // });
+          console.log(details);
+          // setDetails({uri: })
+          return (
+            <Text>YOU CAME HERE</Text>    
+          )
         } else {
           console.log('show marker');
           // this.setState({
@@ -100,12 +105,18 @@ function PhotoEditor(props) {
       <TouchableOpacity onPress={() => _pickImage('image')}>
         <Text>pick image</Text>
       </TouchableOpacity>
+      <Image
+        source={{uri: details.uri}}
+        resizeMode="contain"
+        style={{ height: 100, width: 100}}
+      />
       <View style={{flex: 1}}>
         {details.uri ? (
           // <Image source={{uri: details.uri}} resizeMode="contain" />
           <Text>image</Text>
         ) : null}
       </View>
+      
       <Text>URI{details.uri}</Text>
     </View>
   );
@@ -196,9 +207,7 @@ export default PhotoEditor;
 //               </Text>
 //             </TouchableOpacity>
 //           </View>
-//           <View>
-//             <TouchableOpacity
-//               style={[s.btn, {backgroundColor: '#2296F3'}]}
+//           <View><PhotoEditor myimg="sample.jpg" mycaption={input} />groundColor: '#2296F3'}]}
 //               onPress={() => this._pickImage('image')}>
 //               <Text style={s.text}>pick image</Text>
 //             </TouchableOpacity>

@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 
 import {
@@ -46,42 +46,58 @@ const App: () => React$Node = () => {
 
   const [input, setInput] = useState('sample');
 
+  const [screen, setScreen] = useState('home-screen');
 
-   
 
-  return (
-    <View style={styles.container}>
-      
-      
-      <View style={styles.topControlsContainer}>
-        <TouchableOpacity style={styles.icon}><Icon name="flash" size={40} color="black" /></TouchableOpacity>
-        <TouchableOpacity style={styles.icon}><Icon name="times-circle-o" size={40} color="black" /></TouchableOpacity>
+  
+  if(screen === 'home-screen'){
+    return (
+      <View style={styles.container}>
+
+        <View style={styles.topControlsContainer}>
+          <TouchableOpacity style={styles.icon}><Icon name="flash" size={40} color="black" /></TouchableOpacity>
+          <TouchableOpacity style={styles.icon}><Icon name="times-circle-o" size={40} color="black" /></TouchableOpacity>
+        </View>
+
+        <View style={styles.cameraContainer}>
+          <TextInput
+            style={{
+              width: '100%',
+              height: 50,
+              borderColor: 'black',
+              borderWidth: 1,
+            }}
+            onChangeText={input => setInput(input)}
+            value={input}
+          />
+        </View>
+
+        <PhotoEditor myimg="sample.jpg" mycaption={input} />
+
+        <View style={styles.footerControlsContainer}>
+          <TouchableOpacity style={styles.icon}><Icon name="image" size={40} color="black" /></TouchableOpacity>
+          <TouchableOpacity onPress={() => setScreen('edit-screen')} style={styles.icon}><Icon name="circle-thin" size={100} color="black" /></TouchableOpacity>
+          <TouchableOpacity style={styles.icon}><Icon name="repeat" size={40} color="black" /></TouchableOpacity>
+        </View>
       </View>
-      <TextInput
-        style={{
-          width: '100%',
-          height: 50,
-          borderColor: 'black',
-          borderWidth: 1,
-        }}
-        onChangeText={input => setInput(input)}
-        value={input}
-      />
-      <PhotoEditor myimg="sample.jpg" mycaption={input} />
-
-      <View style={styles.footerControlsContainer}>
-        <TouchableOpacity style={styles.icon}><Icon name="image" size={40} color="black" /></TouchableOpacity>
-        <TouchableOpacity style={styles.icon}><Icon name="circle-thin" size={100} color="black" /></TouchableOpacity>
-        <TouchableOpacity style={styles.icon}><Icon name="repeat" size={40} color="black" /></TouchableOpacity>
+    );
+  }
+  
+  if(screen === 'edit-screen'){
+    return (
+      <View style={styles.container}>
+        <PhotoEditor myimg="sample.jpg" mycaption={input} />
+        
       </View>
-    </View>
-  );
+    );
+  }
+
+
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'red',
     alignContent: "center"
   },
   topControlsContainer: {
@@ -97,13 +113,17 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     backgroundColor: "white",
-    left: 0, 
+    left: 0,
     right: 0,
     flexDirection: "row",
     justifyContent: "space-around",
   },
   icon: {
     alignSelf: "center"
+  },
+  cameraContainer: {
+    flex: 1,
+    backgroundColor: 'green'
   }
 });
 
