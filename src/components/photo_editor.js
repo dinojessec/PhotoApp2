@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import Marker, {Position, ImageFormat} from 'react-native-image-marker';
 import Picker from 'react-native-image-picker';
+import RNFS from 'react-native-fs';
 const icon = require('./icon.jpeg');
 // const iconTP = require('./tpimage.png')
 const bg = require('./bg.png');
@@ -22,94 +23,108 @@ const {width, height} = Dimensions.get('window');
 const textBgStretch = ['', 'stretchX', 'stretchY'];
 
 function PhotoEditor(props) {
-  let [details, setDetails] = useState({
-    uri: '',
-    image: bg,
-    marker: icon,
-    markImage: true,
-    base64: false,
-    useTextShadow: true,
-    useTextBgStyle: true,
-    textBgStretch: 0,
-    saveFormat: ImageFormat.png,
-    loading: false,
-  });
+  let {capturedImage} = props;
+  // console.log(props.watermarkedImage);
+  // let [details, setDetails] = useState({
+  //   uri: '',
+  //   image: bg,
+  //   marker: icon,
+  //   markImage: true,
+  //   base64: false,
+  //   useTextShadow: true,
+  //   useTextBgStyle: true,
+  //   textBgStretch: 0,
+  //   saveFormat: ImageFormat.png,
+  //   loading: false,
+  // });
 
-  _switch = () => {
-    setDetails({markImage: !details.markImage});
-  };
+  // _switch = () => {
+  //   setDetails({markImage: !details.markImage});
+  // };
 
-  _switchBase64Res = () => {
-    setDetails({
-      saveFormat:
-        details.saveFormat === ImageFormat.base64
-          ? Image.png
-          : ImageFormat.base64,
-    });
-  };
+  // _switchBase64Res = () => {
+  //   setDetails({
+  //     saveFormat:
+  //       details.saveFormat === ImageFormat.base64
+  //         ? Image.png
+  //         : ImageFormat.base64,
+  //   });
+  // };
 
-  _pickImage = type => {
-    let options = {
-      title: 'title',
-      takePhotoButtonTitle: 'camera',
-      chooseFromLibraryButtonTitle: 'gallery',
-      cancelButtonTitle: 'cancel',
-      quality: 0.5,
-      mediaType: 'photo',
-      maxWidth: 2000,
-      noData: true,
-      maxHeight: 2000,
-      dateFormat: 'yyyy-MM-dd HH:mm:ss',
-      storageOptions: {
-        skipBackup: true,
-        path: 'imagePickerCache',
-      },
-      allowsEditing: true,
-    };
-    Picker.showImagePicker(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled photo picker');
-      } else if (response.error) {
-        console.log('ImagePickerManager Error: ', response.error);
-      } else if (response.customButton) {
-        // this.showCamera();
-      } else {
-        // You can display the image using either:
-        // const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
-        const uri = response.uri;
-        // console.log('uri == ', uri);
-        if (type === 'image') {
-          setDetails({...details, uri: uri});
-          console.log('show image', details);
-          // this.setState({
-          //   image: uri,
-          // });
-        } else {
-          console.log('show marker');
-          // this.setState({
-          //   marker: uri,
-          // });
-        }
-      }
-    });
-  };
+  // _pickImage = type => {
+  //   let options = {
+  //     title: 'title',
+  //     takePhotoButtonTitle: 'camera',
+  //     // chooseFromLibraryButtonTitle: 'gallery',
+  //     cancelButtonTitle: 'cancel',
+  //     quality: 0.5,
+  //     mediaType: 'photo',
+  //     maxWidth: 2000,
+  //     noData: true,
+  //     maxHeight: 2000,
+  //     dateFormat: 'yyyy-MM-dd HH:mm:ss',
+  //     storageOptions: {
+  //       skipBackup: true,
+  //       path: 'imagePickerCache',
+  //     },
+  //     allowsEditing: true,
+  //   };
+  //   Picker.showImagePicker(options, response => {
+  //     if (response.didCancel) {
+  //       console.log('User cancelled photo picker');
+  //     } else if (response.error) {
+  //       console.log('ImagePickerManager Error: ', response.error);
+  //     } else if (response.customButton) {
+  //       // this.showCamera();
+  //     } else {
+  //       // You can display the image using either:
+  //       // const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
+  //       const uri = response.uri;
+  //       // console.log('uri == ', uri);
+  //       if (type === 'image') {
+  //         setDetails({...details, uri: uri});
+  //         console.log('show image', details);
+  //         // this.setState({
+  //         //   image: uri,
+  //         // });
+  //       } else {
+  //         console.log('show marker');
+  //         // this.setState({
+  //         //   marker: uri,
+  //         // });
+  //       }
+  //     }
+  // });
+  // };
   // console.log(options);
   return (
     <View>
-      <Text>Test</Text>
-      <TouchableOpacity onPress={() => _pickImage('image')}>
-        <Text>pick image</Text>
-      </TouchableOpacity>
-      <View style={{flex: 1}}>
-        {details.uri ? (
-          // <Image source={{uri: details.uri}} resizeMode="contain" />
-          <Text>image</Text>
+      {/* <TouchableOpacity
+        onPress={() => _launchCamera('image')}
+        style={styles.pickImage}>
+        <Image style={{height: 27, width: 27, margin: 5}} />
+        <Text> pick image </Text>
+      </TouchableOpacity> */}
+
+      {/* <View style={{flex: 1, flexDirection: 'row'}}>
+        {watermarkedImage.uri ? (
+          <Image source={{uri: watermarkedImage.uri}} resizeMode="contain" />
         ) : null}
-      </View>
-      <Text>URI{details.uri}</Text>
+        <Text>====================================</Text>
+      </View> */}
+      <Text>URI: {capturedImage}</Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  pickImage: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ff5c5c',
+  },
+});
 
 export default PhotoEditor;
 
