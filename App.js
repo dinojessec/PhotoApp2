@@ -32,47 +32,36 @@ import {
 import Camera from './src/components/camera';
 import RNFS from 'react-native-fs';
 import PhotoEditor from './src/components/photo_editor';
+import AddTextToImage from './src/components/AddTextToImage';
 
 const App: () => React$Node = () => {
   useEffect(() => {
     SplashScreen.hide();
   }, []);
 
+  let [watermarkedImage, setWatermarkedImage] = useState({uri: ''});
   let [finalImage, setFinalImage] = useState({uri: ''});
-
-  // let [capturedImage, setCapturedImage] = useState({
-  //   uri: '',
-  // });
-
-  // RNFS.readDir(RNFS.MainBundlePath)
-  //   .then(result => {
-  //     console.log('GOT RESULT', result);
-  //     return Promise.all([RNFS.stat(result[0].path), result[0].path]);
-  //   })
-  //   .then(statResult => {
-  //     if (statResult[0].isFile()) {
-  //       return RNFS.readFile(statResult[1], 'utf8');
-  //     }
-  //     return 'no file';
-  //   })
-  //   .then(contents => {
-  //     console.log(contents);
-  //   })
-  //   .catch(err => {
-  //     console.log(err.message, err.code);
-  //   });
+  console.log('==========watermarked', watermarkedImage);
+  console.log('==========final', finalImage);
   return (
     <View>
-      {/* <Camera setCapturedImage={setCapturedImage} /> */}
-
-      <PhotoEditor finalImage={finalImage} setFinalImage={setFinalImage} />
-
+      <PhotoEditor setWatermarkedImage={setWatermarkedImage} />
+      <AddTextToImage
+        watermarkedImage={watermarkedImage}
+        setFinalImage={setFinalImage}
+      />
       <View style={{flex: 1, flexDirection: 'row'}}>
         {finalImage.uri ? (
           <Image
             source={{uri: finalImage.uri}}
             resizeMode="contain"
-            style={{height: 100, width: 100}}
+            style={{aspectRatio: 1, width: '100%'}}
+          />
+        ) : watermarkedImage.uri ? (
+          <Image
+            source={{uri: watermarkedImage.uri}}
+            resizeMode="contain"
+            style={{aspectRatio: 1, width: '100%'}}
           />
         ) : null}
         <Text>====================================</Text>
