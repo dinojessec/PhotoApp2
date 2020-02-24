@@ -144,20 +144,25 @@ function PhotoEditor(props) {
   //     });
   // };
   return (
-    <View>
+    <View style={styles.buttonContainer}>
       <TouchableOpacity
-        onPress={() => _pickImage('image')}
-        style={styles.pickImage}>
-        <Image style={{height: 27, width: 27, margin: 5}} />
-        <Text> pick image </Text>
+        onPress={() => {
+          _pickImage('image')
+          props.setScreen('editImage-screen')  
+        }}
+        style={styles.pickImageButton}>
+        <Text> Select a Photo</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  pickImage: {
-    flexDirection: 'row',
+  buttonContainer: {
+    justifyContent: "center",
+    width: '100%'
+  },
+  pickImageButton: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#ff5c5c',

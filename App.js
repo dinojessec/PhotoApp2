@@ -39,46 +39,46 @@ const App: () => React$Node = () => {
   }, []);
 
   let [finalImage, setFinalImage] = useState({uri: ''});
+  let [screen, setScreen] = useState('pickImage-screen');
 
-  // let [capturedImage, setCapturedImage] = useState({
-  //   uri: '',
-  // });
-
-  // RNFS.readDir(RNFS.MainBundlePath)
-  //   .then(result => {
-  //     console.log('GOT RESULT', result);
-  //     return Promise.all([RNFS.stat(result[0].path), result[0].path]);
-  //   })
-  //   .then(statResult => {
-  //     if (statResult[0].isFile()) {
-  //       return RNFS.readFile(statResult[1], 'utf8');
-  //     }
-  //     return 'no file';
-  //   })
-  //   .then(contents => {
-  //     console.log(contents);
-  //   })
-  //   .catch(err => {
-  //     console.log(err.message, err.code);
-  //   });
-  return (
-    <View>
-      {/* <Camera setCapturedImage={setCapturedImage} /> */}
-
-      <PhotoEditor finalImage={finalImage} setFinalImage={setFinalImage} />
-
-      <View style={{flex: 1, flexDirection: 'row'}}>
+  if(screen === 'pickImage-screen') {
+    return (
+      <View style={styles.container}>
+  
+        <PhotoEditor finalImage={finalImage} setFinalImage={setFinalImage} setScreen={setScreen} screen={screen} />
+  
+        
+      </View>
+    );
+  }
+  if(screen === 'editImage-screen') {
+    return (
+      <View style={styles.container}>
         {finalImage.uri ? (
           <Image
             source={{uri: finalImage.uri}}
             resizeMode="contain"
-            style={{height: 100, width: 100}}
+            style={styles.imageContainer}
           />
         ) : null}
         <Text>====================================</Text>
       </View>
-    </View>
-  );
+    );
+  }
+  
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  imageContainer: {
+    width: '100%',
+    aspectRatio: 1,
+    justifyContent: "center"
+  }
+})
 
 export default App;
