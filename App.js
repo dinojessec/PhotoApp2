@@ -106,7 +106,7 @@ const App: () => React$Node = () => {
         </View>
 
         <View style={{flex: 1}}>
-          <Text>HELLO</Text>
+          
         </View>
       </View>
     );

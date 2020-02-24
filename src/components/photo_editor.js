@@ -16,7 +16,8 @@ import RNFS from 'react-native-fs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
-const icon = require('./icon.jpeg');
+const icon = require('./left.png');
+const icon2 = require('./right.png');
 // const iconTP = require('./tpimage.png')
 const bg = require('./bg.png');
 const base64Bg = require('./bas64bg.js').default;
@@ -27,6 +28,7 @@ function PhotoEditor(props) {
     uri: '',
     image: bg,
     marker: icon,
+    marker2: icon2,
     markImage: true,
     base64: false,
     useTextShadow: true,
@@ -83,27 +85,52 @@ function PhotoEditor(props) {
             src: uri,
             markerSrc: details.marker,
             position: Position.topLeft,
-            scale: 1,
-            markerScale: 1,
+            scale: 2,
+            markerScale: 2,
             quality: 100,
             saveFormat: details.saveFormat,
+            
           })
             .then(path => {
-              setImage({
-                uri:
-                  details.saveFormat === ImageFormat.base64
-                    ? path
-                    : Platform.OS === 'android'
-                    ? 'file://' + path
-                    : path,
-              });
-              setScreen('editImage-screen')
+              let pathpath = details.saveFormat === ImageFormat.base64
+              ? path
+              : Platform.OS === 'android'
+              ? 'file://' + path
+              : path
+              Marker.markImage({
+                src: pathpath,
+                markerSrc: details.marker2,
+                position: Position.topRight,
+                scale: 1,
+                markerScale: 1,
+                quality: 100,
+                saveFormat: details.saveFormat,
+              })
+                .then(path => {
+                  setImage({
+                    uri:
+                      details.saveFormat === ImageFormat.base64
+                        ? path
+                        : Platform.OS === 'android'
+                        ? 'file://' + path
+                        : path,
+                  });
+                  setScreen('editImage-screen')
+                })
+                .catch(err => {
+                  console.log('====================================');
+                  console.log(err, 'err');
+                  console.log('====================================');
+                });
+              
             })
             .catch(err => {
               console.log('====================================');
               console.log(err, 'err');
               console.log('====================================');
             });
+
+         
         } else {
           console.log('show marker');
         }
