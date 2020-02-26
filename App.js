@@ -16,6 +16,7 @@ import {
   View,
   Text,
   Image,
+  Button,
   TouchableOpacity,
   TextInput,
   Platform,
@@ -66,13 +67,22 @@ const App: () => React$Node = () => {
       ],
       {cancelable: false},
     );
+  }
 
-
+  let saveHandler = () => {
+    Alert.alert(
+      'Image Saved.',
+      'Thank you for using our app.',
+      [
+        {text: 'OK', onPress: () => {}},
+      ],
+      {cancelable: false},
+    );
   }
 
 
   let _addTextToImage = (input, fontSize, pos) => {
-    pos = pos === '1' ? Position.center: Position.bottomCenter ;
+    pos = pos === '1' ? Position.center: Position.bottomCenter;
     if (image) {
       Marker.markText({
         src: image,
@@ -129,21 +139,25 @@ const App: () => React$Node = () => {
   if(screen === "editImage-screen"){
     return (
       <View style={{flex: 1}}>
+      
         <View style={{flex: 1}}>
           <View style={styles.topControls}>
-            <TouchableOpacity onPress={() => _saveImage()} >
+            <TouchableOpacity onPress={() =>{ 
+              _saveImage();
+              saveHandler();
+            }} >
               <Image source={downloadIcon} style={{height: 40, width: 40}} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => _addTextToImage(value, fontSize, pos)} >
+            {/* <TouchableOpacity onPress={() => _addTextToImage(value, fontSize, pos)} >
               <Image source={addTextIcon} style={{height: 40, width: 40}} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity onPress={backHandler}>
               <Image source={exitIcon} style={{height: 40, width: 40}} />
             </TouchableOpacity>
           </View>
         </View>
 
-        <View style={{flex: 6, justifyContent: "center"}}>
+        <View style={{flex: 10, justifyContent: "center"}}>
           {image.uri ? (
             <Image
               source={{uri: image.uri}}
@@ -153,7 +167,7 @@ const App: () => React$Node = () => {
           ) : null}
         </View>
 
-        <View style={{flex: 2, alignItems: "center"}}>
+        <View style={{flex: 5, alignItems: "center"}}>
           
           <View style={{width: '80%', height: 40, flexDirection: "row", alignItems: "center", marginBottom: 10  }}>
             <Text style={{width: '20%'}}>Text: </Text>
@@ -196,6 +210,11 @@ const App: () => React$Node = () => {
             </Picker>
           </View>
 
+          <TouchableOpacity onPress={() => _addTextToImage(value, fontSize, pos) } activeOpacity = { .5 } style={styles.buttonStyle}>
+            <Text style={{color: "white"}}>Apply Text</Text>
+          </TouchableOpacity>
+          
+
         </View>
       </View>
     );
@@ -223,12 +242,22 @@ const styles = StyleSheet.create({
   topControls: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: '20%',
-    top: 100
+    paddingHorizontal: '10%',
+    top: 40
   },
   iconsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  buttonStyle: {
+    marginTop:10,
+    padding: 10,
+    marginLeft:30,
+    marginRight:30,
+    backgroundColor:'#000000',
+    borderRadius:10,
+    borderWidth: 1,
+    borderColor: '#fff'
   },
 
 })
