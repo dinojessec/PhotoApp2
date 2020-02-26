@@ -34,7 +34,7 @@ const App: () => React$Node = () => {
         first: 5,
         assetType: 'Photos',
       })
-        .then(result => console.log('camera roll result', result))
+        .then(result => console.table('camera roll result', result))
         .catch(err => {
           console.log(err);
           throw err;
