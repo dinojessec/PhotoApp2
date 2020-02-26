@@ -13,18 +13,22 @@ import {
 import Marker, {Position, ImageFormat} from 'react-native-image-marker';
 import Picker from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const icon = require('./icon.jpeg');
+
+const icon = require('./left.png');
+const icon2 = require('./right.png');
 // const iconTP = require('./tpimage.png')
 const bg = require('./bg.png');
 const base64Bg = require('./bas64bg.js').default;
 
 function PhotoEditor(props) {
-  let {setImage} = props;
+  let {setImage, setScreen, setIsLoading, isLoading } = props;
   let [details, setDetails] = useState({
     uri: '',
     image: bg,
     marker: icon,
+    marker2: icon2,
     markImage: true,
     base64: false,
     useTextShadow: true,
@@ -47,7 +51,7 @@ function PhotoEditor(props) {
     });
   };
 
-  _pickImage = type => {
+  _pickImageCamera = type => {
     let options = {
       title: 'title',
       takePhotoButtonTitle: 'camera',
@@ -65,7 +69,7 @@ function PhotoEditor(props) {
       // },
       allowsEditing: true,
     };
-    Picker.showImagePicker(options, response => {
+    Picker.launchCamera(options, response => {
       if (response.didCancel) {
         console.log('User cancelled photo picker');
       } else if (response.error) {
@@ -77,24 +81,55 @@ function PhotoEditor(props) {
         // const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
         const uri = response.uri;
         if (type === 'image') {
+          console.log('is loading..')
+          // isloading true
+          // Display loading screen
+          setIsLoading(true);
+
           Marker.markImage({
             src: uri,
             markerSrc: details.marker,
             position: Position.topLeft,
-            scale: 1,
-            markerScale: 1,
+            scale: 2,
+            markerScale: 2,
             quality: 100,
             saveFormat: details.saveFormat,
+            
           })
             .then(path => {
-              setImage({
-                uri:
-                  details.saveFormat === ImageFormat.base64
-                    ? path
-                    : Platform.OS === 'android'
-                    ? 'file://' + path
-                    : path,
-              });
+              let pathpath = details.saveFormat === ImageFormat.base64
+              ? path
+              : Platform.OS === 'android'
+              ? 'file://' + path
+              : path
+              Marker.markImage({
+                src: pathpath,
+                markerSrc: details.marker2,
+                position: Position.topRight,
+                scale: 1,
+                markerScale: 1,
+                quality: 100,
+                saveFormat: details.saveFormat,
+              })
+                .then(path => {
+                  setImage({
+                    uri:
+                      details.saveFormat === ImageFormat.base64
+                        ? path
+                        : Platform.OS === 'android'
+                        ? 'file://' + path
+                        : path,
+                  });
+                  setScreen('editImage-screen')
+                  // set loading false
+                  setIsLoading(false)
+                })
+                .catch(err => {
+                  console.log('====================================');
+                  console.log(err, 'err');
+                  console.log('====================================');
+                });
+              
             })
             .catch(err => {
               console.log('====================================');
@@ -102,6 +137,8 @@ function PhotoEditor(props) {
               console.log('====================================');
               throw err;
             });
+
+         
         } else {
           console.log('show marker');
         }
@@ -109,21 +146,142 @@ function PhotoEditor(props) {
     });
   };
 
-  return (
-    <View>
-      <TouchableOpacity
-        onPress={() => _pickImage('image')}
-        style={styles.pickImage}>
-        <Image style={{height: 27, width: 27, margin: 5}} />
-        <Text> Get Image </Text>
-      </TouchableOpacity>
-    </View>
-  );
+  _pickImageGallery = type => {
+    let options = {
+      title: 'title',
+      takePhotoButtonTitle: 'camera',
+      // chooseFromLibraryButtonTitle: 'gallery',
+      cancelButtonTitle: 'cancel',
+      quality: 0.5,
+      mediaType: 'photo',
+      maxWidth: 2000,
+      noData: true,
+      maxHeight: 2000,
+      dateFormat: 'yyyy-MM-dd HH:mm:ss',
+      storageOptions: {
+        skipBackup: true,
+        path: 'imagePickerCache',
+      },
+      allowsEditing: true,
+    };
+    Picker.launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled photo picker');
+      } else if (response.error) {
+        console.log('ImagePickerManager Error: ', response.error);
+      } else if (response.customButton) {
+        // this.showCamera();
+      } else {
+        // You can display the image using either:
+        // const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
+        const uri = response.uri;
+        if (type === 'image') {
+          console.log('is loading..')
+          // isloading true
+          // Display loading screen
+          setIsLoading(true);
+
+          Marker.markImage({
+            src: uri,
+            markerSrc: details.marker,
+            position: Position.topLeft,
+            scale: 2,
+            markerScale: 2,
+            quality: 100,
+            saveFormat: details.saveFormat,
+            
+          })
+            .then(path => {
+              let pathpath = details.saveFormat === ImageFormat.base64
+              ? path
+              : Platform.OS === 'android'
+              ? 'file://' + path
+              : path
+              Marker.markImage({
+                src: pathpath,
+                markerSrc: details.marker2,
+                position: Position.topRight,
+                scale: 1,
+                markerScale: 1,
+                quality: 100,
+                saveFormat: details.saveFormat,
+              })
+                .then(path => {
+                  setImage({
+                    uri:
+                      details.saveFormat === ImageFormat.base64
+                        ? path
+                        : Platform.OS === 'android'
+                        ? 'file://' + path
+                        : path,
+                  });
+                  setScreen('editImage-screen')
+                  // set loading false
+                  setIsLoading(false)
+                })
+                .catch(err => {
+                  console.log('====================================');
+                  console.log(err, 'err');
+                  console.log('====================================');
+                });
+              
+            })
+            .catch(err => {
+              console.log('====================================');
+              console.log(err, 'err');
+              console.log('====================================');
+            });
+
+         
+        } else {
+          console.log('show marker');
+        }
+      }
+    });
+  };
+  
+ 
+ 
+  if(props.photoFrom === "camera"){
+    return (
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          onPress={() => _pickImageCamera('image')}
+          style={styles.buttonGroup}
+            
+          >
+          <Icon name="camera" size={50} color="black" />
+          <Text> {props.buttonTitle} </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+  if(props.photoFrom === "gallery"){
+    return (
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          onPress={() => _pickImageGallery('image')}
+          style={styles.buttonGroup}  
+        >
+          <Icon name="image" size={50} color="black" />
+          <Text> {props.buttonTitle} </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+  
 }
 
 const styles = StyleSheet.create({
-  pickImage: {
-    flexDirection: 'row',
+  buttonContainer: {
+    justifyContent: "center",
+    justifyContent: "space-between",
+    padding: 20
+  },
+  buttonGroup: {
+    alignItems: "center"
+  },
+  pickImageButton: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#ff5c5c',

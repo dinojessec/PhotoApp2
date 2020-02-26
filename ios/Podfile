@@ -34,6 +34,16 @@ target 'DOTphotoApp' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
+<<<<<<< HEAD
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+=======
+>>>>>>> aa68ef8c528d871e3b02409a17969d636e78c723
+
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  pod 'rn-range-slider', :path => '../node_modules/rn-range-slider'
+
+  pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
 
   target 'DOTphotoAppTests' do
     inherit! :search_paths
