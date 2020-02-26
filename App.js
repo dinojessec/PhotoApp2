@@ -213,7 +213,7 @@ const App: () => React$Node = () => {
           <View style={{width: '80%', height: 40, flexDirection: "row", alignItems: "center", marginBottom: 10  }}>
             <Text style={{width: '20%'}}>Text: </Text>
             <TextInput 
-              style={{width: '80%', height: 40 , borderColor: 'gray', borderWidth: 1}}
+              style={{width: '80%', height: 40 , borderColor: 'gray', borderWidth: 1, borderRadius: 10}}
               onChangeText={text => onChangeText(text)}
               value={value}
             />
@@ -252,7 +252,7 @@ const App: () => React$Node = () => {
           </View>
 
           <TouchableOpacity onPress={() => _addTextToImage(value, fontSize, pos) } activeOpacity = { .5 } style={styles.buttonStyle}>
-            <Text style={{color: "white"}}>Apply Text</Text>
+            <Text style={{color: "white", fontWeight: "bolder"}}>Apply Text</Text>
           </TouchableOpacity>
           
 
@@ -298,7 +298,9 @@ const styles = StyleSheet.create({
     backgroundColor:'#000000',
     borderRadius:10,
     borderWidth: 1,
-    borderColor: '#fff'
+    borderColor: '#fff',
+    width: '80%',
+    alignItems: "center"
   },
 
 })
