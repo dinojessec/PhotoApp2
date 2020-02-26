@@ -81,6 +81,8 @@ function PhotoEditor(props) {
         // const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
         const uri = response.uri;
         if (type === 'image') {
+          console.log('is loading..')
+          // isloading true
           Marker.markImage({
             src: uri,
             markerSrc: details.marker,
@@ -116,6 +118,7 @@ function PhotoEditor(props) {
                         : path,
                   });
                   setScreen('editImage-screen')
+                  // set loading false
                 })
                 .catch(err => {
                   console.log('====================================');

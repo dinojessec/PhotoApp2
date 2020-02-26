@@ -145,8 +145,8 @@ const App: () => React$Node = () => {
 
   let _saveImage = async () => {
     if (image) {
-      console.log(image.uri);
-      CameraRoll.saveToCameraRoll(image.uri, 'photo');
+      // console.log(image.uri);
+      CameraRoll.saveToCameraRoll(displayImage.uri, 'photo');
       CameraRoll.getPhotos({
         first: 5,
         assetType: 'Photos',
