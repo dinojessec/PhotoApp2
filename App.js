@@ -9,6 +9,11 @@
 import React, {useEffect, useState} from 'react';
 import SplashScreen from 'react-native-splash-screen';
 
+import {StyleSheet, View, Image, TouchableOpacity, Text} from 'react-native';
+import RNFS from 'react-native-fs';
+import ImagePicker from 'react-native-image-picker';
+import CameraRoll from '@react-native-community/cameraroll';
+
 import {
   SafeAreaView,
   StyleSheet,
@@ -32,6 +37,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Marker, {Position, ImageFormat} from 'react-native-image-marker';
 import RangeSlider from 'rn-range-slider';
 import CameraRoll from '@react-native-community/cameraroll';
+
+const APP_FOLDER_NAME = 'DOTPhotoApp';
 
 const App: () => React$Node = () => {
   useEffect(() => {
@@ -120,6 +127,7 @@ const App: () => React$Node = () => {
       });
     }
   };
+
 
   // displayImage = original
   // image = changing state
@@ -292,6 +300,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: '10%',
     top: 40
   },
+
   iconsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -313,6 +322,5 @@ const styles = StyleSheet.create({
   },
 
 })
-
 
 export default App;

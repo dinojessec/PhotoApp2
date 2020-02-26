@@ -47,6 +47,7 @@ function AddTextToImage(props) {
         quality: 100,
         saveFormat: details.saveFormat,
       }).then(path => {
+        console.log(path);
         setImage({
           uri:
             details.saveFormat === ImageFormat.base64
@@ -58,6 +59,7 @@ function AddTextToImage(props) {
           console.log('====================================');
           console.log(err);
           console.log('====================================');
+          throw err;
         });
       });
     }
@@ -70,7 +72,7 @@ function AddTextToImage(props) {
         value={value}
       />
       <TouchableOpacity
-        onPress={() => _addTextToImage(value)}
+        onPress={() => _addTextToImage()}
         style={styles.pickImage}>
         <Image style={{height: 27, width: 27, margin: 5}} />
         <Text> Add Text </Text>
