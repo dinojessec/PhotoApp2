@@ -19,11 +19,15 @@ import {
   TouchableOpacity,
   TextInput,
   Platform,
+  Slider,
+  Alert,
+  Picker
 } from 'react-native';
 
 import PhotoEditor from './src/components/photo_editor';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Marker, {Position, ImageFormat} from 'react-native-image-marker';
+import RangeSlider from 'rn-range-slider';
 
 const App: () => React$Node = () => {
   useEffect(() => {
@@ -32,7 +36,9 @@ const App: () => React$Node = () => {
 
   let [image, setImage] = useState({uri: ''});
   let [screen, setScreen] = useState('pickImage-screen');
-  let [value, onChangeText] = useState('Useless Placeholder');
+  let [value, onChangeText] = useState('#PH');
+  let [fontSize, setFontSize] = useState(40);
+  let [pos, setPos] = useState(0);
 
   let addTextIcon = require('./src/components/text.png');
   let exitIcon = require('./src/components/exit.png');
@@ -41,13 +47,35 @@ const App: () => React$Node = () => {
     setScreen(screenName);
   }
 
+  let backHandler = () => {
+    Alert.alert(
+      'Discard Image?',
+      'If you go back now, you will lose your photo.',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => {
+          setImage({uri: ''})
+          setScreen('pickImage-screen')
+        }},
+      ],
+      {cancelable: false},
+    );
 
-  let _addTextToImage = (input, fontSize) => {
+
+  }
+
+
+  let _addTextToImage = (input, fontSize, pos) => {
+    pos = pos === '1' ? Position.center: Position.bottomCenter ;
     if (image) {
       Marker.markText({
         src: image,
         text: input,
-        position: Position.bottomCenter,
+        position: pos,
         color: '#FFFFFF',
         // fontName: 'Arial-BoldItalicMT',
         fontName: 'Barabara',
@@ -81,21 +109,20 @@ const App: () => React$Node = () => {
   }
 
   if(screen === "editImage-screen"){
-    console.log(screen)
     return (
       <View style={{flex: 1}}>
         <View style={{flex: 1}}>
           <View style={styles.topControls}>
-            <TouchableOpacity onPress={() => _addTextToImage("hello", 400)} >
+            <TouchableOpacity onPress={() => _addTextToImage(value, fontSize, pos)} >
               <Image source={addTextIcon} style={{height: 40, width: 40}} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => changeScreen('pickImage-screen')}>
+            <TouchableOpacity onPress={backHandler}>
               <Image source={exitIcon} style={{height: 40, width: 40}} />
             </TouchableOpacity>
           </View>
         </View>
 
-        <View style={{flex: 3, justifyContent: "center"}}>
+        <View style={{flex: 6, justifyContent: "center"}}>
           {image.uri ? (
             <Image
               source={{uri: image.uri}}
@@ -105,8 +132,49 @@ const App: () => React$Node = () => {
           ) : null}
         </View>
 
-        <View style={{flex: 1}}>
+        <View style={{flex: 2, alignItems: "center"}}>
           
+          <View style={{width: '80%', height: 40, flexDirection: "row", alignItems: "center", marginBottom: 10  }}>
+            <Text style={{width: '20%'}}>Text: </Text>
+            <TextInput 
+              style={{width: '80%', height: 40 , borderColor: 'gray', borderWidth: 1}}
+              onChangeText={text => onChangeText(text)}
+              value={value}
+            />
+          </View>
+          
+          <View style={{width: '80%', height: 40, flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
+            <Text style={{width: '20%'}}>Font Size: </Text>
+            <Slider
+              style={{width: '80%'}}
+              minimumValue={90}
+              maximumValue={400}
+              minimumTrackTintColor="black"
+              maximumTrackTintColor="#000000"
+              value={fontSize}
+              onValueChange={(fontSize)=> {
+                console.log(Math.floor(fontSize))
+                setFontSize(Math.floor(fontSize))
+              }}
+            />
+          </View>
+
+          <View style={{width: '80%', height: 40, flexDirection: "row", alignItems: "center", marginBottom: 10  }}>
+            <Text style={{width: '20%'}}>Text: </Text>
+            
+            <Picker
+              style={{width: '40%', height: 40}}
+              selectedValue={pos}
+              onValueChange={(itemValue) =>{
+                console.log("============ value", itemValue)
+                console.log("============ pos state", pos)
+                setPos(itemValue)
+              }}>
+              <Picker.Item label="Bottom" value="0" />
+              <Picker.Item label="Center" value="1" />
+            </Picker>
+          </View>
+
         </View>
       </View>
     );
