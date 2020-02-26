@@ -64,8 +64,8 @@ const App: () => React$Node = () => {
 
   let backHandler = () => {
     Alert.alert(
-      'Discard Image?',
-      'If you go back now, you will lose your photo.',
+      'Did you save the image?',
+      'You might want to save the image first before closing.',
       [
         {
           text: 'Cancel',
