@@ -22,7 +22,8 @@ import {
   Platform,
   Slider,
   Alert,
-  Picker
+  Picker,
+  ActivityIndicator
 } from 'react-native';
 
 import PhotoEditor from './src/components/photo_editor';
@@ -42,13 +43,23 @@ const App: () => React$Node = () => {
   let [value, onChangeText] = useState('#PH');
   let [fontSize, setFontSize] = useState(40);
   let [pos, setPos] = useState(0);
+  let [isLoading, setIsLoading] = useState(false);
 
   let addTextIcon = require('./src/components/text.png');
-  let exitIcon = require('./src/components/exit.png');
+  let exitIcon = require('./src/components/close.png');
+  let saveIcon = require('./src/components/save.png')
   let downloadIcon = require('./src/components/download.png');
 
   let changeScreen = screenName => {
     setScreen(screenName);
+  }
+
+  if(isLoading) {
+    return (
+      <View style={[styles.container]}>
+        <ActivityIndicator size={100} color="#000000" />
+      </View>
+    )
   }
 
   let backHandler = () => {
@@ -165,8 +176,8 @@ const App: () => React$Node = () => {
       <View style={styles.container}>
         <Text style={styles.buttonTextStyling}>Select a Photo</Text>
         <View style={styles.iconsContainer}>
-          <PhotoEditor setImage={setImage} photoFrom="camera" buttonTitle="Camera" setScreen={setScreen} screen={screen} />
-          <PhotoEditor setImage={setImage} photoFrom="gallery" buttonTitle="Gallery" setScreen={setScreen} screen={screen} />
+          <PhotoEditor setImage={setImage} photoFrom="camera" buttonTitle="Camera" setScreen={setScreen} screen={screen} isLoading={isLoading} setIsLoading={setIsLoading} />
+          <PhotoEditor setImage={setImage} photoFrom="gallery" buttonTitle="Gallery" setScreen={setScreen} screen={screen} isLoading={isLoading} setIsLoading={setIsLoading}/>
         </View>  
       </View>
     )
@@ -182,7 +193,7 @@ const App: () => React$Node = () => {
               _saveImage();
               saveHandler();
             }} >
-              <Image source={downloadIcon} style={{height: 40, width: 40}} />
+              <Image source={saveIcon} style={{height: 40, width: 40}} />
             </TouchableOpacity>
             {/* <TouchableOpacity onPress={() => _addTextToImage(value, fontSize, pos)} >
               <Image source={addTextIcon} style={{height: 40, width: 40}} />

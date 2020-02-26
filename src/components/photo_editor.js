@@ -23,7 +23,7 @@ const bg = require('./bg.png');
 const base64Bg = require('./bas64bg.js').default;
 
 function PhotoEditor(props) {
-  let {setImage, setScreen} = props;
+  let {setImage, setScreen, setIsLoading, isLoading } = props;
   let [details, setDetails] = useState({
     uri: '',
     image: bg,
@@ -83,6 +83,9 @@ function PhotoEditor(props) {
         if (type === 'image') {
           console.log('is loading..')
           // isloading true
+          // Display loading screen
+          setIsLoading(true);
+
           Marker.markImage({
             src: uri,
             markerSrc: details.marker,
@@ -119,6 +122,7 @@ function PhotoEditor(props) {
                   });
                   setScreen('editImage-screen')
                   // set loading false
+                  setIsLoading(false)
                 })
                 .catch(err => {
                   console.log('====================================');
@@ -171,6 +175,8 @@ function PhotoEditor(props) {
         // const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
         const uri = response.uri;
         if (type === 'image') {
+          // display loading screen
+          setIsLoading(true)
           Marker.markImage({
             src: uri,
             markerSrc: details.marker,
@@ -190,6 +196,7 @@ function PhotoEditor(props) {
                     : path,
               });
               setScreen('editImage-screen')
+              setIsLoading(false)
             })
             .catch(err => {
               console.log('====================================');
