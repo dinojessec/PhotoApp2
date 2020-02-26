@@ -175,34 +175,63 @@ function PhotoEditor(props) {
         // const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
         const uri = response.uri;
         if (type === 'image') {
-          // display loading screen
-          setIsLoading(true)
+          console.log('is loading..')
+          // isloading true
+          // Display loading screen
+          setIsLoading(true);
+
           Marker.markImage({
             src: uri,
             markerSrc: details.marker,
             position: Position.topLeft,
-            scale: 1,
-            markerScale: 1,
+            scale: 2,
+            markerScale: 2,
             quality: 100,
             saveFormat: details.saveFormat,
+            
           })
             .then(path => {
-              setImage({
-                uri:
-                  details.saveFormat === ImageFormat.base64
-                    ? path
-                    : Platform.OS === 'android'
-                    ? 'file://' + path
-                    : path,
-              });
-              setScreen('editImage-screen')
-              setIsLoading(false)
+              let pathpath = details.saveFormat === ImageFormat.base64
+              ? path
+              : Platform.OS === 'android'
+              ? 'file://' + path
+              : path
+              Marker.markImage({
+                src: pathpath,
+                markerSrc: details.marker2,
+                position: Position.topRight,
+                scale: 1,
+                markerScale: 1,
+                quality: 100,
+                saveFormat: details.saveFormat,
+              })
+                .then(path => {
+                  setImage({
+                    uri:
+                      details.saveFormat === ImageFormat.base64
+                        ? path
+                        : Platform.OS === 'android'
+                        ? 'file://' + path
+                        : path,
+                  });
+                  setScreen('editImage-screen')
+                  // set loading false
+                  setIsLoading(false)
+                })
+                .catch(err => {
+                  console.log('====================================');
+                  console.log(err, 'err');
+                  console.log('====================================');
+                });
+              
             })
             .catch(err => {
               console.log('====================================');
               console.log(err, 'err');
               console.log('====================================');
             });
+
+         
         } else {
           console.log('show marker');
         }

@@ -192,7 +192,7 @@ const App: () => React$Node = () => {
     return (
       <View style={{flex: 1}}>
       
-        <View style={{flex: 1}}>
+        <View style={{flex: 2}}>
           <View style={styles.topControls}>
             <TouchableOpacity onPress={() =>{ 
               _saveImage();
@@ -209,11 +209,11 @@ const App: () => React$Node = () => {
           </View>
         </View>
 
-        <KeyboardAvoidingView style={{flex: 10, justifyContent: "center"}} behavior="padding" enabled keyboardVerticalOffset={30}> 
+        <KeyboardAvoidingView style={{flex: 7, justifyContent: "center"}} behavior="padding" enabled keyboardVerticalOffset={30}> 
           {imageDisplayer()}
         </KeyboardAvoidingView>
 
-        <View style={{flex: 5, alignItems: "center"}}>
+        <View style={{flex: 4, alignItems: "center"}}>
           <View style={{width: '80%', height: 40, flexDirection: "row", alignItems: "center", marginBottom: 10}}>
             <Text style={{width: '20%',fontFamily: "Barabara",  fontSize: 12}} >Text </Text>
             <TextInput 
