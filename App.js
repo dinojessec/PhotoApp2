@@ -37,6 +37,7 @@ const App: () => React$Node = () => {
   }, []);
 
   let [image, setImage] = useState({uri: ''});
+  let [displayImage, setDisplayImage] = useState({uri: ''})
   let [screen, setScreen] = useState('pickImage-screen');
   let [value, onChangeText] = useState('#PH');
   let [fontSize, setFontSize] = useState(40);
@@ -96,7 +97,7 @@ const App: () => React$Node = () => {
         quality: 100,
         saveFormat: ImageFormat.png,
       }).then(path => {
-        setImage({
+        setDisplayImage({
           uri: Platform.OS === 'android' ? 'file://' + path : path
         }).catch(err => {
           console.log('====================================');
@@ -106,6 +107,41 @@ const App: () => React$Node = () => {
       });
     }
   };
+
+  // displayImage = original
+  // image = changing state
+
+  let imageDisplayer = () => {
+    if(displayImage.uri) {
+      // display the display image
+      console.log("display image")
+      return (
+        <Image
+          source={{uri: displayImage.uri}}
+          resizeMode="contain"
+          style={styles.image}
+        />
+      )
+    } 
+    else {
+      console.log("image")
+      if (image) {
+        // display image
+        return(
+          <Image
+            source={{uri: image.uri}}
+            resizeMode="contain"
+            style={styles.image}
+          />
+        )
+      }
+      else {
+        // display none
+        return null
+      }
+    }
+  }
+  
 
   let _saveImage = async () => {
     if (image) {
@@ -158,13 +194,7 @@ const App: () => React$Node = () => {
         </View>
 
         <View style={{flex: 10, justifyContent: "center"}}>
-          {image.uri ? (
-            <Image
-              source={{uri: image.uri}}
-              resizeMode="contain"
-              style={styles.image}
-            />
-          ) : null}
+          {imageDisplayer()}
         </View>
 
         <View style={{flex: 5, alignItems: "center"}}>
