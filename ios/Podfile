@@ -43,6 +43,8 @@ target 'DOTphotoApp' do
 
   pod 'rn-range-slider', :path => '../node_modules/rn-range-slider'
 
+  pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
+
   target 'DOTphotoAppTests' do
     inherit! :search_paths
     # Pods for testing

@@ -28,6 +28,7 @@ import PhotoEditor from './src/components/photo_editor';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Marker, {Position, ImageFormat} from 'react-native-image-marker';
 import RangeSlider from 'rn-range-slider';
+import CameraRoll from '@react-native-community/cameraroll';
 
 const App: () => React$Node = () => {
   useEffect(() => {
@@ -42,6 +43,7 @@ const App: () => React$Node = () => {
 
   let addTextIcon = require('./src/components/text.png');
   let exitIcon = require('./src/components/exit.png');
+  let downloadIcon = require('./src/components/download.png');
 
   let changeScreen = screenName => {
     setScreen(screenName);
@@ -95,6 +97,22 @@ const App: () => React$Node = () => {
     }
   };
 
+  let _saveImage = async () => {
+    if (image) {
+      console.log(image.uri);
+      CameraRoll.saveToCameraRoll(image.uri, 'photo');
+      CameraRoll.getPhotos({
+        first: 5,
+        assetType: 'Photos',
+      })
+        .then(result => console.log('camera roll result', result))
+        .catch(err => {
+          console.log(err);
+          throw err;
+        });
+    }
+  };
+
   if(screen === "pickImage-screen"){
     console.log(screen)
     return (
@@ -113,6 +131,9 @@ const App: () => React$Node = () => {
       <View style={{flex: 1}}>
         <View style={{flex: 1}}>
           <View style={styles.topControls}>
+            <TouchableOpacity onPress={() => _saveImage()} >
+              <Image source={downloadIcon} style={{height: 40, width: 40}} />
+            </TouchableOpacity>
             <TouchableOpacity onPress={() => _addTextToImage(value, fontSize, pos)} >
               <Image source={addTextIcon} style={{height: 40, width: 40}} />
             </TouchableOpacity>
@@ -153,21 +174,21 @@ const App: () => React$Node = () => {
               maximumTrackTintColor="#000000"
               value={fontSize}
               onValueChange={(fontSize)=> {
-                console.log(Math.floor(fontSize))
+                // console.log(Math.floor(fontSize))
                 setFontSize(Math.floor(fontSize))
               }}
             />
           </View>
 
           <View style={{width: '80%', height: 40, flexDirection: "row", alignItems: "center", marginBottom: 10  }}>
-            <Text style={{width: '20%'}}>Text: </Text>
+            <Text style={{width: '20%'}}>Position: </Text>
             
             <Picker
               style={{width: '40%', height: 40}}
               selectedValue={pos}
               onValueChange={(itemValue) =>{
-                console.log("============ value", itemValue)
-                console.log("============ pos state", pos)
+                // console.log("============ value", itemValue)
+                // console.log("============ pos state", pos)
                 setPos(itemValue)
               }}>
               <Picker.Item label="Bottom" value="0" />
