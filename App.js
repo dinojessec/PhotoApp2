@@ -23,7 +23,8 @@ import {
   Slider,
   Alert,
   Picker,
-  ActivityIndicator
+  ActivityIndicator,
+  KeyboardAvoidingView
 } from 'react-native';
 
 import PhotoEditor from './src/components/photo_editor';
@@ -74,6 +75,7 @@ const App: () => React$Node = () => {
         },
         {text: 'OK', onPress: () => {
           setImage({uri: ''})
+          setDisplayImage({uri: ''})
           setScreen('pickImage-screen')
         }},
       ],
@@ -204,12 +206,11 @@ const App: () => React$Node = () => {
           </View>
         </View>
 
-        <View style={{flex: 10, justifyContent: "center"}}>
+        <KeyboardAvoidingView style={{flex: 10, justifyContent: "center"}} behavior="padding" enabled keyboardVerticalOffset={30}> 
           {imageDisplayer()}
-        </View>
+        </KeyboardAvoidingView>
 
         <View style={{flex: 5, alignItems: "center"}}>
-          
           <View style={{width: '80%', height: 40, flexDirection: "row", alignItems: "center", marginBottom: 10  }}>
             <Text style={{width: '20%'}}>Text: </Text>
             <TextInput 
