@@ -69,11 +69,11 @@ const App: () => React$Node = () => {
       'You might want to save the image first before closing.',
       [
         {
-          text: 'Cancel',
+          text: 'Go back',
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        {text: 'OK', onPress: () => {
+        {text: 'Discard image', onPress: () => {
           setImage({uri: ''})
           setDisplayImage({uri: ''})
           setScreen('pickImage-screen')
@@ -85,8 +85,8 @@ const App: () => React$Node = () => {
 
   let saveHandler = () => {
     Alert.alert(
-      'Image Saved.',
-      'Thank you for using our app.',
+      'Image saved.',
+      'Check your photo gallery and start sharing the fun!',
       [
         {text: 'OK', onPress: () => {}},
       ],
@@ -176,7 +176,10 @@ const App: () => React$Node = () => {
     console.log(screen)
     return (
       <View style={styles.container}>
-        <Text style={styles.buttonTextStyling}>Select a Photo</Text>
+        <View style={{marginBottom: 10, alignItems: "center"}}> 
+          <Text style={styles.buttonTextStyling}>Select the</Text>
+          <Text style={styles.buttonTextStyling}>Photo source</Text>
+        </View>
         <View style={styles.iconsContainer}>
           <PhotoEditor setImage={setImage} photoFrom="camera" buttonTitle="Camera" setScreen={setScreen} screen={screen} isLoading={isLoading} setIsLoading={setIsLoading} />
           <PhotoEditor setImage={setImage} photoFrom="gallery" buttonTitle="Gallery" setScreen={setScreen} screen={screen} isLoading={isLoading} setIsLoading={setIsLoading}/>
@@ -195,7 +198,7 @@ const App: () => React$Node = () => {
               _saveImage();
               saveHandler();
             }} >
-              <Image source={saveIcon} style={{height: 40, width: 40}} />
+              <Image source={saveIcon} style={{height: 40, width: 40, paddingHorizontal: 20 }} />
             </TouchableOpacity>
             {/* <TouchableOpacity onPress={() => _addTextToImage(value, fontSize, pos)} >
               <Image source={addTextIcon} style={{height: 40, width: 40}} />
@@ -211,17 +214,17 @@ const App: () => React$Node = () => {
         </KeyboardAvoidingView>
 
         <View style={{flex: 5, alignItems: "center"}}>
-          <View style={{width: '80%', height: 40, flexDirection: "row", alignItems: "center", marginBottom: 10  }}>
-            <Text style={{width: '20%'}}>Text: </Text>
+          <View style={{width: '80%', height: 40, flexDirection: "row", alignItems: "center", marginBottom: 10}}>
+            <Text style={{width: '20%',fontFamily: "Barabara",  fontSize: 12}} >Text </Text>
             <TextInput 
-              style={{width: '80%', height: 40 , borderColor: 'gray', borderWidth: 1, borderRadius: 10}}
+              style={{width: '80%', height: 40 , borderColor: 'gray', borderWidth: 1, borderRadius: 10, paddingHorizontal: 10}}
               onChangeText={text => onChangeText(text)}
               value={value}
             />
           </View>
           
           <View style={{width: '80%', height: 40, flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-            <Text style={{width: '20%'}}>Font Size: </Text>
+            <Text style={{width: '20%',fontFamily: "Barabara",  fontSize: 12}}>size </Text>
             <Slider
               style={{width: '80%'}}
               minimumValue={90}
@@ -237,7 +240,7 @@ const App: () => React$Node = () => {
           </View>
 
           <View style={{width: '80%', height: 40, flexDirection: "row", alignItems: "center", marginBottom: 10  }}>
-            <Text style={{width: '20%'}}>Position: </Text>
+            <Text style={{width: '25%', fontFamily: "Barabara", fontSize: 12}}>Position </Text>
             
             <Picker
               style={{width: '40%', height: 40}}
@@ -253,7 +256,7 @@ const App: () => React$Node = () => {
           </View>
 
           <TouchableOpacity onPress={() => _addTextToImage(value, fontSize, pos) } activeOpacity = { .5 } style={styles.buttonStyle}>
-            <Text style={{color: "white", fontWeight: "bolder"}}>Apply Text</Text>
+            <Text style={{color: "white", fontWeight: "bolder", fontFamily: "Barabara"}}>APPLY</Text>
           </TouchableOpacity>
           
 
@@ -279,7 +282,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonTextStyling: {
-    fontFamily: "Barabara"
+    fontFamily: "Barabara",
+    fontSize: 24,
+    marginBottom: 10
   },
   topControls: {
     flexDirection: "row",
@@ -301,7 +306,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fff',
     width: '80%',
-    alignItems: "center"
+    alignItems: "center",
+    height: 60,
+    justifyContent: "center",
+    
   },
 
 })

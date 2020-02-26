@@ -217,9 +217,10 @@ function PhotoEditor(props) {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           onPress={() => _pickImageCamera('image')}
-          style={styles.buttonGroup}  
+          style={styles.buttonGroup}
+            
           >
-          <Icon name="camera" size={40} color="black" />
+          <Icon name="camera" size={50} color="black" />
           <Text> {props.buttonTitle} </Text>
         </TouchableOpacity>
       </View>
@@ -232,7 +233,7 @@ function PhotoEditor(props) {
           onPress={() => _pickImageGallery('image')}
           style={styles.buttonGroup}  
         >
-          <Icon name="image" size={40} color="black" />
+          <Icon name="image" size={50} color="black" />
           <Text> {props.buttonTitle} </Text>
         </TouchableOpacity>
       </View>
